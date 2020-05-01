@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans 
+    http://www.springframework.org/schema/beans/spring-beans.xsd 
+    http://www.springframework.org/schema/context 
+    http://www.springframework.org/schema/context/spring-context.xsd">
+    
+    <context:component-scan base-package="com.capgemini.springcorepractice"></context:component-scan>
+    <bean id="secondary" class="com.capgemini.springcorepractice.bean.StudentSecondaryInfo">
+    <!--  <constructor-arg name="city" value="hyd"></constructor-arg>
+    <constructor-arg name="addresstype" value="current"></constructor-arg>-->
+    <property name="city" value="Banglore"></property>
+    <property name="addresstype" value="current"></property>
+    
+    </bean>
+    
+    <bean id="primary" class="com.capgemini.springcorepractice.bean.StudentPrimaryInfo">
+    <!--  <constructor-arg name="id" value="6"></constructor-arg>
+    <constructor-arg name="name" value="priya"></constructor-arg>
+    <constructor-arg name="email" value="priya@gmail.com"></constructor-arg>
+    <constructor-arg name="secondaryinfo" ref="secondary"></constructor-arg>-->
+    
+    
+    <property name="id" value="6"></property>
+    <property name="name" value="priya"></property>
+    <property name="email" value="priya@gmail.com"></property>
+    <property name="secondaryinfo" ref="secondary"></property>
+    
+    </bean>
+    
+    
+    
+    
+    </beans>
