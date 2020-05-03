@@ -1,3 +1,4 @@
+
 package com.capgemini.springmvcpractice.service;
 
 import java.util.List;
@@ -40,6 +41,12 @@ public class EmployeeServiceDAOImple implements EmployeeServiceDao {
 	public List<EmployeeInfoBean> getAllEMployeeInfo() {
 		
 		return dao.getAllEMployeeInfo();
+	}
+
+	@Override
+	public EmployeeInfoBean authenticate(int id, String password) {
+		// TODO Auto-generated method stub
+		return dao.authenticate(id,password);
 	}
 
 }

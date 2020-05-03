@@ -4,14 +4,14 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Insert title here</title>
+<title>Update Page</title>
 </head>
 <body>
 <fieldset>
 	<legend>Update Employee</legend>
 	<form action="./updateEmployee">
-	Employee Id :<input type = "number" name="id" required>
-	Employee age : <input type ="number" name="age" required>
+	Employee Id :<input type = "number" name="empId" required>
+	Employee Name : <input type ="text" name="name" required>
 	&nbsp;&nbsp;&nbsp;&nbsp;
 	<input type="submit" value="Update">
 	</form>

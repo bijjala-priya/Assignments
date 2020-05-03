@@ -19,6 +19,17 @@ public class EmployeeDAOImple implements EmployeeDAO {
 	EntityManagerFactory factory;
 
 	@Override
+	public EmployeeInfoBean authenticate(int empId, String password) {
+		EmployeeInfoBean employeeInfoBean=getEmployeeDetails(empId);
+		if (employeeInfoBean!=null && employeeInfoBean.getPassword().equals(password)) {
+			return employeeInfoBean;
+		}
+		
+		
+		return null;
+	}
+
+	@Override
 	public EmployeeInfoBean getEmployeeDetails(int id) {
 		EntityManager manager = factory.createEntityManager();
 		EmployeeInfoBean employeeInfoBean = manager.find(EmployeeInfoBean.class, id);
@@ -97,4 +108,5 @@ public class EmployeeDAOImple implements EmployeeDAO {
 		
 	}
 
+	
 }

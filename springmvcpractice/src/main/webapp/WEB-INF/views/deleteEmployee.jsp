@@ -10,7 +10,7 @@
 <fieldset>
 	<legend>Delete Employee</legend>
 	<form action="./deleteEmployee">
-	Employee Id : <input type ="number" name="id" required>
+	Employee Id : <input type ="number" name="empId" required>
 	&nbsp;&nbsp;&nbsp;&nbsp;
 	<input type="submit" value="Delete">
 	</form>

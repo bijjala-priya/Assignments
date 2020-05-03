@@ -2,6 +2,9 @@ package com.capgemini.springmvcpractice.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
@@ -12,44 +15,91 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import com.capgemini.springmvcpractice.dto.EmployeeInfoBean;
 import com.capgemini.springmvcpractice.service.EmployeeServiceDao;
+
 @Controller
 public class EmployeeController {
 	@Autowired
 	EmployeeServiceDao service;
 	
-	@GetMapping("/getEmployeeForm")
-	public String getEmployeeForm() {
-		
-		return "searchEmployee";
+	@GetMapping("/loginForm")
+	public String getLoginForm() {
+		return "loginForm";
 	}
-	@GetMapping("getEmployee")
-	public String getEmployee(int id,ModelMap modelMap) {
-		EmployeeInfoBean employeeInfoBean=service.getEmployeeDetails(id);
+	@PostMapping("/login")
+	public String authenticate(int empId,String password,HttpServletRequest req) {
+		EmployeeInfoBean employeeInfoBean=service.authenticate(empId,password);
 		if(employeeInfoBean!=null) {
-			modelMap.addAttribute("employeeInfo",employeeInfoBean);
+			HttpSession session=req.getSession(true);
+			session.setAttribute("loggedInEmpInfo",employeeInfoBean);
+			return "homePage";
 		}else {
-			modelMap.addAttribute("errmsg","Employee Id Not Found");
+			req.setAttribute("errMsg","Invalid Credentails");
+			return "loginForm";
 		}
-		return "searchEmployee";
 		
 	}
+	@GetMapping("/home")
+	public String showHomePage(HttpSession session, ModelMap modelMap) {
+		if(session.getAttribute("loggedInEmpInfo")!=null) {
+			return "homePage";
+		}else {
+			modelMap.addAttribute("errMsg","please Login To Access This Page");
+			return "loginForm";
+		}
+	}
+	
+	@GetMapping("/getEmployeeForm")
+	public String getEmployeeForm(HttpSession session, ModelMap modelMap) {
+		if(session.isNew()) {
+			modelMap.addAttribute("errMsg","Please LogIn First!");
+			return "loginForm";
+		}
+		
+		return "searchEmployee";
+	}//End Of GetEmployeeForm()
+	
+	@GetMapping("getEmployee")
+	public String getEmployee(int empId,ModelMap modelMap,HttpSession session) {
+		if(session.getAttribute("loggedInEmpInfo")!=null) {
+			EmployeeInfoBean employeeInfoBean=service.getEmployeeDetails(empId);
+			if(employeeInfoBean!=null) {
+				modelMap.addAttribute("employeeInfo",employeeInfoBean);
+			}else {
+				modelMap.addAttribute("errMsg","Employee Id Not Found");
+			}
+			return "searchEmployee";	
+		}else {
+			modelMap.addAttribute("errMsg","Please Login First");
+			return "loginForm";
+		}		
+		
+	}//End Of getEmployee()
 	@GetMapping("/delete")
-	public String getdeleteForm() {
+	public String getdeleteForm(HttpSession session,ModelMap modelMap) {
+		if(session.isNew()) {
+			modelMap.addAttribute("errMsg","Please LogIn First!");
+		return "loginForm";
+		}
 		return "deleteEmployee";
 	}
 	@GetMapping("/deleteEmployee")
-	public String getDelete(int id, ModelMap map) {//model map to transfer the data
-		boolean deleted = service.deleteEmployeeInfo(id);
+	public String getDelete(int empId, ModelMap map,HttpSession session) {//model map to transfer the data
+		if(session.getAttribute("loggedInEmpInfo")!=null) {
+		boolean deleted = service.deleteEmployeeInfo(empId);
 		if(deleted) {
 			map.addAttribute("hello", "Record Deleted");
 			return "hello";
 		} else {
 			return "deleteEmployee";
 		}
+		}else {
+			map.addAttribute("errMsg","Please Login First");
+			return "loginForm";
+		}
 	}
 	@GetMapping("/getAll")
 	public String getAllForm() {
-		return "allDetailOfEmp";
+		return "getAllEmployee";
 	}
 	@GetMapping("/getAllEmployee")
 	public String getAllForm(ModelMap map) {
@@ -58,11 +108,16 @@ public class EmployeeController {
 		return "getAllEmployee";
 	}
 	@GetMapping("/update")
-	public String getupdateForm() {
+	public String getupdateForm(HttpSession session,ModelMap modelMap) {
+		if(session.isNew()) {
+			modelMap.addAttribute("errMsg","Please LogIn First!");
+		return "loginForm";
+		}
 		return "updateEmp";
 	}
-	@PostMapping("/updateEmployee")
-	public String getUpdate(EmployeeInfoBean info, ModelMap map) {//model map to transfer the data
+	@GetMapping("/updateEmployee")
+	public String getUpdate(EmployeeInfoBean info, ModelMap map,HttpSession session) {//model map to transfer the data
+		if(session.getAttribute("loggedInEmpInfo")!=null) {
 		boolean updated = service.updateEmployeeInfo(info);
 		if(updated) {
 			map.addAttribute("hello", "Record Updated");
@@ -70,7 +125,44 @@ public class EmployeeController {
 		} else {
 			return "updateEmp";
 		}
+		}else {
+			map.addAttribute("errMsg","Please Login First");
+			return "loginForm";
+		}
 	}
+	@GetMapping("/add")
+	public String getAddEmployeeForm(HttpSession session,ModelMap modelMap) {
+		if(session.isNew()) {
+			modelMap.addAttribute("errMsg","Please LogIn First!");
+		return "loginForm";
+		}
+
+		return "addEmployee";
+	}
+
+	@PostMapping("/addEmployee")
+	public String submitForm(EmployeeInfoBean info, ModelMap map,HttpSession session) {
+		if(session.getAttribute("loggedInEmpInfo")!=null) {
+		boolean added = service.addEmployee(info);
+		if (added) {
+			map.addAttribute("added", added);
+			return "hello";
+		}else {
+		return "addEmployee";
+		}
+		}else {
+			map.addAttribute("errMsg","Please Login First");
+			return "loginForm";
+		}
+	}
+	
+	@GetMapping("/logout")
+	public String logOut(HttpSession session,ModelMap modelMap) {
+		session.invalidate();
+		modelMap.addAttribute("errMsg","You Are Logged Out Successsfully");
+		return "loginForm";
+	}
+
 	
 	
 

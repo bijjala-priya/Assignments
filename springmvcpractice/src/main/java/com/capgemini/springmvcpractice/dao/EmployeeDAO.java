@@ -7,6 +7,7 @@ import com.capgemini.springmvcpractice.dto.EmployeeInfoBean;
 
 public interface EmployeeDAO {
 	
+	EmployeeInfoBean authenticate(int empId,String password);
 	EmployeeInfoBean getEmployeeDetails(int id);
 	boolean addEmployee(EmployeeInfoBean info);
 	boolean deleteEmployeeInfo(int id);

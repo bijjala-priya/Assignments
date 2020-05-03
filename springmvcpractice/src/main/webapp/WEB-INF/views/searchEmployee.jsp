@@ -11,6 +11,8 @@
 <title>Insert title here</title>
 </head>
 <body>
+<h4><a href="./home">Home</a></h4>
+<h4><a href="./logout">Logout</a></h4>
 <fieldset>
 <legend>Search Employee</legend>
 <form action="./getEmployee" method="get">

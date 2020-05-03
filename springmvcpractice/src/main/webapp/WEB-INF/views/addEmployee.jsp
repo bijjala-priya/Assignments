@@ -7,6 +7,7 @@
 <title>Insert title here</title>
 </head>
 <body>
+<h4><a href="./home">Home</a></h4>
 <form action="./addEmployee" method="post">
 		<table>
 			<tr>
@@ -36,7 +37,7 @@
 			</tr>
 			
 			<tr>
-				<td colspan="2" align="center"><input type="submit" value="Register"></td>
+				<td colspan="2" align="center"><input type="submit" value="Add Employee"></td>
 				
 			</tr>
 

@@ -11,6 +11,7 @@ public interface EmployeeServiceDao {
 	boolean deleteEmployeeInfo(int id);
 	boolean updateEmployeeInfo(EmployeeInfoBean info);
 	List<EmployeeInfoBean> getAllEMployeeInfo();
+	EmployeeInfoBean authenticate(int id,String password);
 
 
 }
